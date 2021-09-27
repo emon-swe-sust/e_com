@@ -1,0 +1,12 @@
+/* ./src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+    .navitem{
+        @apply block mt-1 py-2 px-3  md:inline-block md:mt-0 hover:underline
+      hover:text-green-600 mr-2
+        rounded-md;
+    }
+} 
