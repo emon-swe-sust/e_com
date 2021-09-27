@@ -1,16 +1,16 @@
-import React, { useContext } from 'react'
-import { shoppingListContext } from '../context/ShoppingContext'
+import React from 'react'
 import DollarIcon from '../icons/DollarIcon'
-import ItemDownArrowIcon from '../icons/ItemDownArrowIcon'
-import ItemUpArrow from '../icons/ItemUpArrowIcon'
+import {LargeItemDownArrowIcon} from '../icons/ItemDownArrowIcon'
+import { LargeItemUpArrowIcon } from '../icons/ItemUpArrowIcon'
 import People from '../icons/PeopleIcon'
 import StarIcon from '../icons/StarIcon'
 import useChangeSelectedItems from './useChangeSelectedItemsCount'
+import { useSelector } from 'react-redux'
 
 function ItemCards({ item }) {
-  const { selectedItems } = useContext(shoppingListContext)
-
-  const itemCount = selectedItems.filter(({ id }) => id === item.id)[0] ? 
+  const {selectedItems} = useSelector(state => state.selectedItemReducer)
+ 
+  const itemCount = selectedItems && selectedItems.filter(({ id }) => id === item.id)[0] ? 
   selectedItems.filter(({ id }) => id === item.id)[0].count : 0
 
   const changeSelectedItemsCount = useChangeSelectedItems(item.id)
@@ -63,7 +63,7 @@ function ItemCards({ item }) {
           </button>
         ) : (
           <div
-            className='w-full px-2 py-1 rounded-md bg-blue-50 border-2
+            className='w-full px-2 rounded-md bg-blue-50 border-2
           border-blue-200 hover:border-blue-600 flex'
           >
             <div className='m-auto flex space-x-4'>
@@ -72,11 +72,11 @@ function ItemCards({ item }) {
                   changeSelectedItemsCount(itemCount > 0 ? itemCount - 1 : 0)
                 }
               >
-                <ItemDownArrowIcon />
+                <LargeItemDownArrowIcon />
               </button>
-              <div className='flex'>{itemCount}</div>
+              <div className='flex pt-1'>{itemCount}</div>
               <button onClick={() => changeSelectedItemsCount(itemCount + 1)}>
-                <ItemUpArrow />
+                <LargeItemUpArrowIcon />
               </button>
             </div>
           </div>

@@ -1,16 +1,15 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import Footer from '../footer/Footer'
 import Navbar from '../navbar/Navbar'
-import { shoppingListContext } from './../context/ShoppingContext'
 import CheckoutItems from './CheckoutItems'
 
 function Checkout() {
   const history = useHistory()
-  const { selectedItems, setSelectedItems, totalPrice } = useContext(shoppingListContext)
+  const { selectedItems, totalPrice } = useSelector(state=>state.selectedItemReducer)
 
   const confirmCheckout = () => {
-    setSelectedItems([])
     history.push('/confirm/')
   }
 

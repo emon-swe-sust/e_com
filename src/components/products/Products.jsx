@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import { useSelector } from 'react-redux'
 import ProductSearch from './ProductSearch'
 import HashLinkUp from '../footer/HashLinkUp'
 import Navbar from '../navbar/Navbar'
 import Banner from '../banner/Banner'
 import Footer from './../footer/Footer'
 import Loading from './Loading'
+import useFetchItems from './useFetchItems'
 
 function Products () {
   const [searchedCategory, setSearchedCategory] = useState('ALL PRODUCTS')
   const [searchedItems, setSearchedItems] = useState('')
-  const [isItemsLoaded, setIsItemLoaded] = useState(false)
   const categories = [
     'ALL PRODUCTS',
     "men's clothing",
@@ -18,22 +18,14 @@ function Products () {
     'electronics',
     "women's clothing"
   ]
+  const {fetched, items} = useSelector(state => state.itemReducer)
+  const fetch = useFetchItems('https://fakestoreapi.com/products')
 
   useEffect(() => {
-    function fetchItems () {
-      if (localStorage.getItem('items') === null) {
-        axios
-          .get('https://fakestoreapi.com/products/')
-          .then(response => response.data)
-          .then(response =>
-            localStorage.setItem('items', JSON.stringify(response))
-          )
-          .then(() => setIsItemLoaded(true))
-          .catch(() => alert('API DOWN!'))
-      } else setIsItemLoaded(true)
+    if(!fetched){
+      fetch()
     }
-    fetchItems()
-  }, [])
+  }, [fetched, fetch])
 
   return (
     <div className='mt-12'>
@@ -98,9 +90,9 @@ function Products () {
           </div>
         </div>
       </div>
-      {isItemsLoaded || localStorage.getItem('items') ? (
+      {fetched ? (
         <ProductSearch
-          items={JSON.parse(localStorage.getItem('items'))}
+          items={items}
           searchedCategory={searchedCategory}
           searchedItems={searchedItems}
         />

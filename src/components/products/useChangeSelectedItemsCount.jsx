@@ -1,40 +1,51 @@
-import { useContext } from "react"
-import { shoppingListContext } from "../context/ShoppingContext"
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  addSelectedItem,
+  deleteSelectedItem,
+  updateSelectedItems,
+  updateTotalPrice
+} from '../../redux/actions/selectedItemsAction'
 
-function useChangeSelectedItems(idx) {
-  const { selectedItems, setSelectedItems, setTotalPrice, totalPrice } = useContext(shoppingListContext)
-  const itemList = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : []
+function useChangeSelectedItems (idx) {
+  const { selectedItems, totalPrice } = useSelector(
+    state => state.selectedItemReducer
+  )
+  const { fetched, items } = useSelector(state => state.itemReducer)
+  const dispatch = useDispatch()
+  const itemList = fetched ? items : []
 
-  const changeSelectedItemsCount = (changedItemCount) => {
-    let currentItem = selectedItems.filter(({ id }) => id === idx)
-    if (currentItem.length > 0) {
-      // Setting the total price 
-      setTotalPrice(selectedItems.map(({ count, price, id }) => {
-        if (id === idx) return price * changedItemCount
-        else return price * count
-      }).reduce((total, price) => total + price, 0))
+  const changeSelectedItemsCount = changedItemCount => {
+    let currentItem = selectedItems && selectedItems.filter(({ id }) => id === idx)
+    if (currentItem && currentItem.length > 0) {
+
+      dispatch(
+        updateTotalPrice(
+          selectedItems
+            .map(({ count, price, id }) => {
+              if (id === idx) return price * changedItemCount
+              else return price * count
+            })
+            .reduce((total, price) => total + price, 0)
+        )
+      )
 
       if (changedItemCount < 1) {
-        setSelectedItems(selectedItems.filter(({ id }) => id !== idx))
-      } else {
+        dispatch(deleteSelectedItem(idx))
+      } 
+      else {
         currentItem = currentItem[0]
         currentItem = { ...currentItem, count: changedItemCount }
-        setSelectedItems(
-          selectedItems.map(item => {
-            if (item.id === idx) return currentItem
-            else return item
-          })
-        )
+        dispatch(updateSelectedItems(idx, currentItem))
       }
     } else {
+      
       currentItem = itemList.filter(({ id }) => id === idx)
       currentItem = currentItem[0]
       currentItem = { ...currentItem, count: changedItemCount }
-      // Setting the total price 
-      setTotalPrice(totalPrice + currentItem.price)
-      setSelectedItems([...selectedItems, currentItem])
+      dispatch(updateTotalPrice(totalPrice+currentItem.price))
+      dispatch(addSelectedItem(currentItem))
     }
   }
-  return changeSelectedItemsCount;
+  return changeSelectedItemsCount
 }
 export default useChangeSelectedItems

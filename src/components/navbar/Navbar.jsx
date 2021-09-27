@@ -1,14 +1,14 @@
-import React, { useContext, useState } from 'react'
+import React, {  useState } from 'react'
 import SidebarContainer from '../sidebar/SidebarContainer'
 import { Link } from 'react-router-dom'
-import { shoppingListContext } from '../context/ShoppingContext'
 import LogoIcon from '../icons/LogoIcon'
+import { useSelector } from 'react-redux'
 
 function Navbar() {
   const [navShow, setNavShow] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const { selectedItems } = useContext(shoppingListContext)
-  const totalItems = selectedItems.map(({ count }) => count).reduce((total, count) => total + count, 0)
+  const { selectedItems } = useSelector(state=>state.selectedItemReducer)
+  const totalItems = selectedItems && selectedItems.map(({ count }) => count).reduce((total, count) => total + count, 0)
 
   const cart = (
     <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>

@@ -57,7 +57,7 @@ function SidebarItemCards ({
                 <ItemDownArrowIcon />
               </button>
             </div>
-            <div className='text-gray-500'>Quantity {selectedItem.count}</div>
+            <div className='text-gray-500'>{selectedItem.count}</div>
             <div className='text-gray-500'>
               <button onClick={() => changeSelectedItemsCount(selectedItem.count + 1)}>
                 <ItemUpArrowIcon />

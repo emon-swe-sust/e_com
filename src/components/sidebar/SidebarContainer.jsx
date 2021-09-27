@@ -1,12 +1,14 @@
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
-import { shoppingListContext } from '../context/ShoppingContext'
 import SidebarItemCards from './SidebarItemCards'
 import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { clearCart, updateTotalPrice } from '../../redux/actions/selectedItemsAction'
 
 export default function Example ({ isSidebarOpen, setIsSidebarOpen }) {
-  const { selectedItems, totalPrice, setSelectedItems, setTotalPrice } = useContext(shoppingListContext)
+  const {selectedItems, totalPrice} = useSelector(state=>state.selectedItemReducer)
+  const dispatch = useDispatch()
 
   return (
     <Transition.Root show={isSidebarOpen} as={Fragment}>
@@ -64,7 +66,7 @@ export default function Example ({ isSidebarOpen, setIsSidebarOpen }) {
                     <div className='mt-8 px-4 sm:px-6'>
                       <div className='flow-root'>
                         <div className='-my-6 divide-y divide-gray-200'>
-                          {selectedItems.map(
+                          {selectedItems && selectedItems.map(
                             selectedItem => (
                               <SidebarItemCards
                                 key={selectedItem.id}
@@ -85,7 +87,7 @@ export default function Example ({ isSidebarOpen, setIsSidebarOpen }) {
                     <p className='mt-0.5 text-sm text-gray-500'>
                       Shipping and taxes calculated at checkout.
                     </p>
-                    {selectedItems.length > 0 && (
+                    {selectedItems && selectedItems.length > 0 && (
                       <div className='mt-6 flex'>
                         <button
                           className='w-full px-3'
@@ -103,8 +105,8 @@ export default function Example ({ isSidebarOpen, setIsSidebarOpen }) {
                         <button
                           className='w-full px-3'
                           onClick={() => {
-                            setSelectedItems([])
-                            setTotalPrice(0)
+                            dispatch(clearCart())
+                            dispatch(updateTotalPrice(0))
                           }
                           }
                         >
