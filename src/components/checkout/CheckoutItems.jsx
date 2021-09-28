@@ -16,7 +16,7 @@ function CheckoutItems ({ image, title, price, count }) {
         <div className='font-semibold text-xs'>
           <div className='my-1'>{title}</div>
           <hr />
-          <div className='mt-2'>Qty {count}</div>
+          <div className='mt-2'>Quantity {count}</div>
         </div>
 
         <div className='ml-auto'>

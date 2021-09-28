@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { fetchItems } from '../../redux/actions/fetchItemsAction'
 import { useDispatch } from 'react-redux'
-
+// Is useless after using redux-thunks
 function useFetchItems (URL) {
   const dispatch = useDispatch()
 

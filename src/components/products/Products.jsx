@@ -7,6 +7,8 @@ import Banner from '../banner/Banner'
 import Footer from './../footer/Footer'
 import Loading from './Loading'
 import useFetchItems from './useFetchItems'
+import { useDispatch } from 'react-redux'
+import { fetchItems } from '../../redux/actions/fetchItemsAction'
 
 function Products () {
   const [searchedCategory, setSearchedCategory] = useState('ALL PRODUCTS')
@@ -19,11 +21,12 @@ function Products () {
     "women's clothing"
   ]
   const {fetched, items} = useSelector(state => state.itemReducer)
-  const fetch = useFetchItems('https://fakestoreapi.com/products')
+  // const fetch = useFetchItems('https://fakestoreapi.com/products')
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if(!fetched){
-      fetch()
+      dispatch(fetchItems)
     }
   }, [fetched, fetch])
 
